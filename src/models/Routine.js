@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
+const { RECURRENCE_TYPE } = require('../shared/utils/const/routine');
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-const RECURRENCE_TYPES = ['daily', 'weekdays', 'weekly', 'custom_days'];
 
 const routineSchema = new mongoose.Schema(
   {
@@ -23,7 +23,7 @@ const routineSchema = new mongoose.Schema(
     },
     recurrenceType: {
       type: String,
-      enum: { values: RECURRENCE_TYPES, message: `Recurrence type must be one of: ${RECURRENCE_TYPES.join(', ')}` },
+      enum: { values: Object.values(RECURRENCE_TYPE), message: `Recurrence type must be one of: ${Object.values(RECURRENCE_TYPE).join(', ')}` },
       required: [true, 'Recurrence type is required'],
     },
     // Used for 'weekly' (one day) and 'custom_days' (multiple days)
@@ -55,5 +55,4 @@ routineSchema.pre(/^find/, function (next) {
 });
 
 module.exports = mongoose.model('Routine', routineSchema);
-module.exports.RECURRENCE_TYPES = RECURRENCE_TYPES;
 module.exports.DAYS = DAYS;

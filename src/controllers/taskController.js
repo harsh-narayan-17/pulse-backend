@@ -1,7 +1,7 @@
 const Task = require('../models/Task');
-const asyncWrapper = require('../utils/asyncWrapper');
-const pick = require('../utils/pick');
-const { success } = require('../utils/apiResponse');
+const asyncWrapper = require('../shared/utils/asyncWrapper');
+const pick = require('../shared/utils/pick');
+const { success } = require('../shared/utils/apiResponse');
 
 const getTasks = asyncWrapper(async (req, res) => {
   const { bucket, completed, search, page = 1, limit = 50 } = req.query;

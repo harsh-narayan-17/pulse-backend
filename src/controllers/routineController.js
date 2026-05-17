@@ -1,14 +1,16 @@
 const Routine = require('../models/Routine');
 const RoutineLog = require('../models/RoutineLog');
-const asyncWrapper = require('../utils/asyncWrapper');
-const pick = require('../utils/pick');
-const { success } = require('../utils/apiResponse');
+const asyncWrapper = require('../shared/utils/asyncWrapper');
+const pick = require('../shared/utils/pick');
+const { success } = require('../shared/utils/apiResponse');
 const { getTodayRoutines, calculateStreak, getDateString } = require('../services/routineService');
+const { RECURRENCE_TYPE } = require('../shared/utils/const/routine');
 
 const getRoutines = asyncWrapper(async (req, res) => {
   const { page = 1, limit = 50 } = req.query;
   const skip = (Number(page) - 1) * Number(limit);
 
+  // TODO can i imrpove pagination? - not required tho
   const [routines, total] = await Promise.all([
     Routine.find({ userId: req.user.id })
       .sort({ order: 1, createdAt: 1 })
@@ -26,8 +28,8 @@ const getRoutines = asyncWrapper(async (req, res) => {
 const createRoutine = asyncWrapper(async (req, res) => {
   const { title, time, recurrenceType, selectedDays, order } = req.body;
 
-  const resolvedDays =
-    recurrenceType === 'weekly' && (!selectedDays || selectedDays.length === 0)
+  const resolvedSelectedDays =
+    recurrenceType === RECURRENCE_TYPE.WEEKLY && (!selectedDays || selectedDays.length === 0)
       ? ['sunday']
       : selectedDays || [];
 
@@ -36,7 +38,7 @@ const createRoutine = asyncWrapper(async (req, res) => {
     title,
     time,
     recurrenceType,
-    selectedDays: resolvedDays,
+    selectedDays: resolvedSelectedDays,
     order: order ?? 0,
   });
 
@@ -45,9 +47,11 @@ const createRoutine = asyncWrapper(async (req, res) => {
 
 const updateRoutine = asyncWrapper(async (req, res) => {
   const allowed = pick(req.body, ['title', 'time', 'recurrenceType', 'selectedDays', 'active', 'order']);
+  const { user, params } = req;
+  const { id } = params;
 
   const routine = await Routine.findOneAndUpdate(
-    { _id: req.params.id, userId: req.user.id },
+    { _id: id, userId: user.id },
     { $set: allowed },
     { new: true, runValidators: true }
   );
