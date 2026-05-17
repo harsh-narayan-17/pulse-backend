@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-const BUCKETS = ['today', 'tomorrow', 'someday'];
+const { BUCKETS } = require('../shared/utils/const/routine');
 
 const taskSchema = new mongoose.Schema(
   {
@@ -51,4 +50,3 @@ taskSchema.pre(/^find/, function (next) {
 taskSchema.index({ title: 'text' });
 
 module.exports = mongoose.model('Task', taskSchema);
-module.exports.BUCKETS = BUCKETS;

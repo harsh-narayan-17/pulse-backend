@@ -1,7 +1,7 @@
 const { body } = require('express-validator');
+const { RECURRENCE_TYPE } = require('../shared/utils/const/routine');
 
 const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
-const RECURRENCE_TYPES = ['daily', 'weekdays', 'weekly', 'custom_days'];
 
 const createRoutineValidator = [
   body('title')
@@ -14,7 +14,7 @@ const createRoutineValidator = [
     .matches(/^([01]\d|2[0-3]):([0-5]\d)$/).withMessage('Time must be in HH:MM (24-hour) format'),
 
   body('recurrenceType')
-    .isIn(RECURRENCE_TYPES).withMessage(`Recurrence type must be one of: ${RECURRENCE_TYPES.join(', ')}`),
+    .isIn(Object.values(RECURRENCE_TYPE)).withMessage(`Recurrence type must be one of: ${Object.values(RECURRENCE_TYPE).join(', ')}`),
 
   body('selectedDays')
     .optional()
@@ -41,7 +41,7 @@ const updateRoutineValidator = [
 
   body('recurrenceType')
     .optional()
-    .isIn(RECURRENCE_TYPES).withMessage(`Recurrence type must be one of: ${RECURRENCE_TYPES.join(', ')}`),
+    .isIn(RECURRENCE_TYPE).withMessage(`Recurrence type must be one of: ${Object.values(RECURRENCE_TYPE).join(', ')}`),
 
   body('selectedDays')
     .optional()

@@ -1,6 +1,5 @@
 const { body } = require('express-validator');
-
-const BUCKETS = ['today', 'tomorrow', 'someday'];
+const { BUCKETS } = require('../shared/utils/const/routine');
 
 const createTaskValidator = [
   body('title')

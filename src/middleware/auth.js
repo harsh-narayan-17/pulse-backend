@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-const { error } = require('../utils/apiResponse');
+const { error } = require('../shared/utils/apiResponse');
 
 const protect = (req, res, next) => {
   const authHeader = req.headers.authorization;
