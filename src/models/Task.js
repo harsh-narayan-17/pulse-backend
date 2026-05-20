@@ -15,6 +15,12 @@ const taskSchema = new mongoose.Schema(
       trim: true,
       maxlength: [200, 'Title cannot exceed 200 characters'],
     },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [1000, 'Description cannot exceed 1000 characters'],
+      default: '',
+    },
     bucket: {
       type: String,
       enum: { values: BUCKETS, message: `Bucket must be one of: ${BUCKETS.join(', ')}` },
