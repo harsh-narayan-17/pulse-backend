@@ -14,6 +14,11 @@ const createTaskValidator = [
     .optional({ nullable: true })
     .isISO8601().withMessage('Due date must be a valid ISO 8601 date'),
 
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .isLength({ max: 1000 }).withMessage('Description cannot exceed 1000 characters'),
+
   body('order')
     .optional()
     .isNumeric().withMessage('Order must be a number'),
@@ -33,6 +38,11 @@ const updateTaskValidator = [
   body('completed')
     .optional()
     .isBoolean().withMessage('Completed must be a boolean'),
+
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .isLength({ max: 1000 }).withMessage('Description cannot exceed 1000 characters'),
 
   body('dueDate')
     .optional({ nullable: true })

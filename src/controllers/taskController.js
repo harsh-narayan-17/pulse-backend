@@ -32,11 +32,12 @@ const getTasks = asyncWrapper(async (req, res) => {
 });
 
 const createTask = asyncWrapper(async (req, res) => {
-  const { title, bucket, dueDate, order } = req.body;
+  const { title, description, bucket, dueDate, order } = req.body;
 
   const task = await Task.create({
     userId: req.user.id,
     title,
+    description: description || '',
     bucket,
     dueDate: dueDate || null,
     order: order ?? 0,
@@ -46,7 +47,7 @@ const createTask = asyncWrapper(async (req, res) => {
 });
 
 const updateTask = asyncWrapper(async (req, res) => {
-  const allowed = pick(req.body, ['title', 'bucket', 'completed', 'dueDate', 'order']);
+  const allowed = pick(req.body, ['title', 'description', 'bucket', 'completed', 'dueDate', 'order']);
 
   const task = await Task.findOneAndUpdate(
     { _id: req.params.id, userId: req.user.id },

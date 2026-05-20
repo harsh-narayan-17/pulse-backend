@@ -26,7 +26,7 @@ const getRoutines = asyncWrapper(async (req, res) => {
 });
 
 const createRoutine = asyncWrapper(async (req, res) => {
-  const { title, time, recurrenceType, selectedDays, order } = req.body;
+  const { title, description, time, recurrenceType, selectedDays, order } = req.body;
 
   const resolvedSelectedDays =
     recurrenceType === RECURRENCE_TYPE.WEEKLY && (!selectedDays || selectedDays.length === 0)
@@ -36,6 +36,7 @@ const createRoutine = asyncWrapper(async (req, res) => {
   const routine = await Routine.create({
     userId: req.user.id,
     title,
+    description: description || '',
     time,
     recurrenceType,
     selectedDays: resolvedSelectedDays,
@@ -46,7 +47,7 @@ const createRoutine = asyncWrapper(async (req, res) => {
 });
 
 const updateRoutine = asyncWrapper(async (req, res) => {
-  const allowed = pick(req.body, ['title', 'time', 'recurrenceType', 'selectedDays', 'active', 'order']);
+  const allowed = pick(req.body, ['title', 'description', 'time', 'recurrenceType', 'selectedDays', 'active', 'order']);
   const { user, params } = req;
   const { id } = params;
 

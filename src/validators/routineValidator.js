@@ -23,6 +23,11 @@ const createRoutineValidator = [
   body('selectedDays.*')
     .isIn(DAYS).withMessage(`Each day must be one of: ${DAYS.join(', ')}`),
 
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .isLength({ max: 1000 }).withMessage('Description cannot exceed 1000 characters'),
+
   body('order')
     .optional()
     .isNumeric().withMessage('Order must be a number'),
@@ -49,6 +54,11 @@ const updateRoutineValidator = [
 
   body('selectedDays.*')
     .isIn(DAYS).withMessage(`Each day must be one of: ${DAYS.join(', ')}`),
+
+  body('description')
+    .optional({ nullable: true })
+    .trim()
+    .isLength({ max: 1000 }).withMessage('Description cannot exceed 1000 characters'),
 
   body('active')
     .optional()
